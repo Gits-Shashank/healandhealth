@@ -92,13 +92,37 @@
 
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
+  #appointment {
+    padding: 40px 10px;
+    min-height: auto;
+  }
+
   .form-container {
-    padding: 20px;
-    margin: 2px;
+    padding: 20px 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+  }
+
+  #appointmentForm input,
+  #appointmentForm textarea {
+    font-size: 0.95rem;
+    padding: 10px;
   }
 
   .gender-selection {
-    flex-direction: row;
+    flex-direction: column;
     align-items: flex-start;
+    gap: 10px;
+  }
+
+  #appointmentForm button {
+    font-size: 1rem;
+    padding: 10px;
+  }
+
+  #live-time-container {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
   }
 }
+
