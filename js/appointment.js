@@ -25,3 +25,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+function updateLiveTime() {
+  const now = new Date();
+  const options = {
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  };
+
+  const formattedTime = now.toLocaleString("en-IN", options);
+  document.getElementById("live-time").textContent = formattedTime;
+}
+
+setInterval(updateLiveTime, 1000); // Update every second
+updateLiveTime(); // Call immediately
