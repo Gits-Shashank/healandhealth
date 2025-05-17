@@ -82,6 +82,13 @@
   background-color: #005fa3;
   transform: translateY(-2px);
 }
+#live-time-container {
+  text-align: center;
+  display: inline-block;
+  font-weight: bold;
+  font-size: 1rem;
+  color: #333;
+}
 
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
