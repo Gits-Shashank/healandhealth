@@ -95,6 +95,7 @@
   #appointment {
     padding: 40px 10px;
     min-height: auto;
+    margin-bottom: 0;
   }
 
   .form-container {
