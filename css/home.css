@@ -203,18 +203,7 @@
     text-align: center;
   }
 }
-@media (max-width: 768px) {
-  /* Typing animation text */
-  #typed-text {
-    font-size: 1.8rem;
-    text-align: center;
-  }
-
-  .cursor {
-    font-size: 1.5rem;
-  }
-
-  /* FAQ Section */
+/* FAQ Section */
   .faq-section {
     padding: 30px 15px;
   }
