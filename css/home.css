@@ -119,6 +119,49 @@
     transform: translateY(0);
   }
 }
+.faq-section {
+  background: rgba(255, 255, 255, 0.5);
+  padding: 50px 20px;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  min-width: 900px;
+  margin: auto;
+}
+
+.faq-section h2 {
+  text-align: center;
+  color: #0066cc;
+  margin-bottom: 30px;
+}
+
+.faq-toggle {
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  padding: 15px;
+  font-size: 1rem;
+  width: 100%;
+  text-align: left;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.faq-toggle:hover,
+.faq-toggle.active {
+  background-color: #004d99;
+}
+
+.faq-content {
+  display: none;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 15px;
+  margin-bottom: 15px;
+  border-left: 4px solid #0066cc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
 
 /* ===== Responsive for Tablets & Phones ===== */
 @media (max-width: 768px) {
