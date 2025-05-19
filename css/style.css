@@ -164,26 +164,7 @@ nav a:hover {
   color: white;
   transition: transform 0.3s ease, color 0.3s ease;
 }
-.social-bar a.fb {
-  border: 1px;
-  border-color: #1877f2;
-}
-.social-bar a.ig {
-  border: 1px;
-  border-color: #e1306c;
-}
-.social-bar a.wa {
-  border: 1px;
-  border-color: #25D366;
-}
-.social-bar a.tw {
-  border: 1px;
-  border-color: #1da1f2;
-}
-.social-bar a.yt {
-  border: 1px;
-  border-color: #fa0404;
-}
+
 
 .social-bar a.fb:hover {
   color: #1877f2; /* Facebook blue */
