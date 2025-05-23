@@ -1,5 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
-  // === Live Time Section ===
+// ========== Live Time Display ==========
   function updateLiveTime() {
     const now = new Date();
     const options = {
@@ -15,53 +14,128 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("live-time").textContent = formattedTime;
     return formattedTime;
   }
+setInterval(updateLiveTime, 1000);
+updateLiveTime(); // Initial run
 
-  setInterval(updateLiveTime, 1000);
-  updateLiveTime();
+// ========== Slot Booking ==========
+const openHour = 10; // 10 AM
+const closeHour = 21; // 9 PM
+const slotDuration = 30; // in minutes
+let bookedSlots = [];
 
-  // === Daily Patient Counter (localStorage based) ===
-  function incrementDailyCounter() {
-    const today = new Date().toISOString().split("T")[0]; // yyyy-mm-dd
-    let counterData = JSON.parse(localStorage.getItem("patientCounter")) || {};
+function getNextAvailableSlot() {
+  const now = new Date();
+  let currentHour = now.getHours();
+  let currentMin = now.getMinutes();
 
-    if (counterData.date !== today) {
-      counterData = { date: today, count: 1 };
-    } else {
-      counterData.count += 1;
-    }
+  let slotStart = new Date();
+  slotStart.setSeconds(0);
+  slotStart.setMilliseconds(0);
 
-    localStorage.setItem("patientCounter", JSON.stringify(counterData));
-    return counterData.count;
+  if (currentHour < openHour) {
+    slotStart.setHours(openHour, 0);
+  } else {
+    let minutesSinceOpen = (currentHour - openHour) * 60 + currentMin;
+    let nextSlotMinutes = Math.ceil(minutesSinceOpen / slotDuration) * slotDuration;
+    slotStart.setHours(openHour + Math.floor(nextSlotMinutes / 60), nextSlotMinutes % 60);
   }
 
-  // === Form Submit Handler ===
-  document.getElementById("appointmentForm").addEventListener("submit", function (e) {
-    e.preventDefault();
+  if (slotStart.getHours() >= closeHour) return null;
 
-    const name = document.getElementById("name").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const age = document.getElementById("age").value.trim();
-    const address = document.getElementById("address").value.trim();
-    const condition = document.getElementById("condition").value.trim();
-    const gender = document.querySelector("input[name='gender']:checked");
+  // Check for booked
+  while (bookedSlots.some(s => s.getTime() === slotStart.getTime())) {
+    slotStart.setMinutes(slotStart.getMinutes() + slotDuration);
+    if (slotStart.getHours() >= closeHour) return null;
+  }
 
-    if (!name || !phone || !age || !address || !condition || !gender) {
-      alert("Please fill in all fields.");
-      return;
+  return slotStart;
+}
+
+// ========== Form Validation ==========
+function validateForm() {
+  const name = document.getElementById("name");
+  const gender = document.querySelector("input[name='gender']:checked");
+  const age = document.getElementById("age");
+  const phone = document.getElementById("phone");
+  const address = document.getElementById("address");
+  const condition = document.getElementById("condition");
+
+  let valid = true;
+
+  const fields = [name, gender, age, phone, address, condition];
+  fields.forEach((field) => {
+    if (!field.value.trim()) {
+      field.setCustomValidity("Please fill this field.");
+      field.reportValidity();
+      valid = false;
+    } else {
+      field.setCustomValidity("");
     }
-
-    if (phone.length !== 10 || isNaN(phone)) {
-      alert("Enter a valid 10-digit phone number.");
-      return;
-    }
-
-    const genderValue = gender.value;
-    const liveTime = updateLiveTime();
-    const dailyPatientNo = incrementDailyCounter();
-
-    const message = `*Appointment Request*\n\n*Patient No:* ${dailyPatientNo}\n*Name:* ${name}\n*Phone:* ${phone}\n*Age:* ${age}\n*Gender:* ${genderValue}\n*Address:* ${address}\n*Condition:* ${condition}\n*Time:* ${liveTime}`;
-
-    const whatsappLink = `https://wa.me/918577050405?text=${encodeURIComponent(message)}`;
-    window.open(whatsappLink, '_blank');
   });
+
+  return valid;
+}
+
+// ========== Razorpay Integration ==========
+document.getElementById("payBtn").addEventListener("click", () => {
+  if (!validateForm()) return;
+
+  const slot = getNextAvailableSlot();
+  if (!slot) {
+    alert("Sorry, no slots available today.");
+    return;
+  }
+
+  const formattedSlot = slot.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  const options = {
+    key: "RAZORPAY_KEY_ID", // Replace with your Razorpay Key ID
+    amount: 20000, // Rs 200 in paise
+    currency: "INR",
+    name: "Heal&Health Clinic",
+    description: "Appointment Booking",
+    handler: function (response) {
+      bookedSlots.push(slot);
+      showConfirmation(slot);
+      sendWhatsAppMessages(slot);
+    },
+    prefill: {
+      name: document.getElementById("name").value,
+      contact: document.getElementById("phone").value,
+    },
+    theme: {
+      color: "#2a92db",
+    },
+  };
+
+  const rzp = new Razorpay(options);
+  rzp.open();
 });
+
+// ========== Show Confirmation ==========
+function showConfirmation(slot) {
+  const formatted = slot.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  alert(`Appointment booked successfully for slot: ${formatted}`);
+}
+
+// ========== WhatsApp Notification ==========
+function sendWhatsAppMessages(slot) {
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
+  const gender = document.querySelector("input[name='gender']:checked").value;
+  const age = document.getElementById("age").value;
+  const address = document.getElementById("address").value;
+  const condition = document.getElementById("condition").value;
+  const timeSlot = slot.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  const doctorMsg = `New Appointment:\nName: ${name}\nGender: ${gender}\nAge: ${age}\nPhone: ${phone}\nAddress: ${address}\nCondition: ${condition}\nSlot: ${timeSlot}`;
+  const patientMsg = `Hi ${name}, your appointment is confirmed at Heal&Health.\nSlot Time: ${timeSlot}\nThank you!`;
+
+  // Simulate sending WhatsApp via API like Twilio or UltraMsg
+  const docNumber = "918577050405"; // Replace with actual doctor number
+  const patientNumber = phone.replace(/^0/, '91');
+
+  // Open WhatsApp messages (simulation)
+  window.open(`https://wa.me/${docNumber}?text=${encodeURIComponent(doctorMsg)}`);
+  window.open(`https://wa.me/${patientNumber}?text=${encodeURIComponent(patientMsg)}`);
+}
