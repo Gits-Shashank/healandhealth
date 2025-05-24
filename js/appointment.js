@@ -89,7 +89,7 @@ document.getElementById("payBtn").addEventListener("click", () => {
   const formattedSlot = slot.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
   const options = {
-    key: "RAZORPAY_KEY_ID", // Replace with your Razorpay Key ID
+    key: "rzp_test_h36FfzdtnxV18B", // Replace with your Razorpay Key ID
     amount: 20000, // Rs 200 in paise
     currency: "INR",
     name: "Heal&Health Clinic",
