@@ -51,6 +51,7 @@
   background: rgba(255, 255, 255, 0.5); /* Transparent white */
   backdrop-filter: blur(7px);
   margin: 10px;
+  margin-bottom: 40px;
   animation: fadeIn 1s ease;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
@@ -98,12 +99,14 @@
 .expert-info h2 {
   font-size: 2rem;
   color: #0066cc;
+  text-align: center;
   margin-bottom: 10px;
 }
 
 .expert-info p {
   font-size: 1rem;
   color: #333;
+  text-align: center;
   line-height: 1.6;
   margin-bottom: 10px;
 }
@@ -129,6 +132,7 @@
   max-width: 800px;
   width: 80%;
   margin: 0 auto;
+  margin-bottom: 60px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
