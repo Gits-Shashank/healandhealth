@@ -207,11 +207,12 @@
   .expert-info h2 {
     text-align: center;
   }
-}
+
 /* FAQ Section */
   .faq-section {
     padding: 30px 15px;
-    min-width: 360px;
+    width: 90%;
+    margin: 0 auto;
   }
 
   .faq-toggle {
