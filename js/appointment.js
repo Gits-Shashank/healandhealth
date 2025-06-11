@@ -69,14 +69,7 @@ function validateForm() {
       valid = false;
     } else {
       field.setCustomValidity("");
-    }
-  });
-
-  return valid;
-}
-
-// ========== WhatsApp Redirect ==========
-document.getElementById("payBtn").addEventListener("click", () => {
+      document.getElementById("payBtn").addEventListener("click", () => {
   if (!validateForm()) return;
 
   const slot = getNextAvailableSlot();
@@ -93,14 +86,26 @@ document.getElementById("payBtn").addEventListener("click", () => {
   const condition = document.getElementById("condition").value;
   const timeSlot = slot.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-  bookedSlots.push(slot); // Optional: mark slot as booked
+  bookedSlots.push(slot);
 
   const doctorMsg = `New Appointment:\nName: ${name}\nGender: ${gender}\nAge: ${age}\nPhone: ${phone}\nAddress: ${address}\nCondition: ${condition}\nSlot: ${timeSlot}`;
   const patientMsg = `Hi ${name}, your appointment is confirmed at Heal&Health.\nSlot Time: ${timeSlot}\nThank you!`;
 
-  const docNumber = "918577050404"; // Doctor's WhatsApp number
+  const docNumber = "918577050405"; // Doctor's number
   const patientNumber = phone.replace(/^0/, '91');
 
-  window.open(`https://wa.me/${docNumber}?text=${encodeURIComponent(doctorMsg)}`);
-  window.open(`https://wa.me/${patientNumber}?text=${encodeURIComponent(patientMsg)}`);
+  // Redirect to doctor WhatsApp message
+  const waLink = `https://wa.me/${docNumber}?text=${encodeURIComponent(doctorMsg)}`;
+  window.location.href = waLink;
+
+  // Optionally send patient message with delay
+  setTimeout(() => {
+    window.open(`https://wa.me/${patientNumber}?text=${encodeURIComponent(patientMsg)}`, "_blank");
+  }, 1000);
 });
+    }
+  });
+
+  return valid;
+}
+
