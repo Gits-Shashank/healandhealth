@@ -98,7 +98,7 @@ document.getElementById("payBtn").addEventListener("click", () => {
   const doctorMsg = `New Appointment:\nName: ${name}\nGender: ${gender}\nAge: ${age}\nPhone: ${phone}\nAddress: ${address}\nCondition: ${condition}\nSlot: ${timeSlot}`;
   const patientMsg = `Hi ${name}, your appointment is confirmed at Heal&Health.\nSlot Time: ${timeSlot}\nThank you!`;
 
-  const docNumber = "918577050405"; // Doctor's WhatsApp number
+  const docNumber = "918577050404"; // Doctor's WhatsApp number
   const patientNumber = phone.replace(/^0/, '91');
 
   window.open(`https://wa.me/${docNumber}?text=${encodeURIComponent(doctorMsg)}`);
